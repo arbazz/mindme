@@ -16,6 +16,7 @@ import {
 } from "react-native-chart-kit";
 import { Actions } from "react-native-router-flux";
 import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const data = {
   labels: ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10"],
@@ -73,12 +74,12 @@ export default class SurveyCompletedScreen extends Component {
 
   profileDataByID() {
     const self = this;
-    console.log("here...prof in...");
+    console.log("here...prof in...",  global.userId);
     axios
       .post(
         global.address + "allSurveyUserScores",
         {
-          id: global.userId,
+          id: 0+ global.userId,
         },
         {
           headers: {
@@ -93,7 +94,7 @@ export default class SurveyCompletedScreen extends Component {
         console.log("coming in...");
 
         const result = Object.keys(res.data).map((key) => res.data[key].score);
-        console.log(result);
+        console.log(res);
         // var daata = JSON.stringify(res.data);
         //const values = responseJson.map(value => value.IMPORTO);
 
@@ -117,7 +118,7 @@ export default class SurveyCompletedScreen extends Component {
       "API-TOKEN": "ABCDEFGHIJK",
     };
 
-    console.warn("to submit");
+    // console.warn("to submit");
 
     if (this._isMounted) {
       this.getToken;
@@ -140,7 +141,7 @@ export default class SurveyCompletedScreen extends Component {
         .then((res) => {
           console.log(res);
           console.log(res.data);
-          //AsyncStorage.setItem("id", res.data.user.id);
+          AsyncStorage.setItem("id", res.data.user.id);
           //AsyncStorage.setItem("token", res.data.access_token).then((res) => {
           //  Actions.startup();
           //});
@@ -158,7 +159,7 @@ export default class SurveyCompletedScreen extends Component {
       let userData = await AsyncStorage.getItem("userData");
       let data = JSON.parse(userData);
       this.setState({ userID: data.user.id });
-      console.warn(data.user.id);
+      // console.warn(data.user.id);
       return data;
       userID: data.user.id;
       console.warn(userID);
@@ -193,7 +194,8 @@ export default class SurveyCompletedScreen extends Component {
     const { navigation } = this.props;
 
     const tempNumber = this.props.surveyScore;
-    console.log(tempNumber)
+    console.log( this.state.data );
+    
     /*console.warn(tempNumber);
     console.warn(answers[0]);
     console.warn(answers["smst_relationship"]);
@@ -313,6 +315,7 @@ const styles = StyleSheet.create({
   graphCOntienar: {
     marginTop: 30,
     marginBottom: 30,
+    marginLeft: 20
   },
   btn: {
     marginTop: 30,

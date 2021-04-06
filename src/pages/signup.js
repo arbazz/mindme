@@ -22,6 +22,7 @@ import {
 import { Actions } from "react-native-router-flux";
 import CustomInput from "../components/CustomInput";
 import { primary } from "./config";
+import { addProfileData } from "../fire/addData";
 
 export default class Login extends Component {
   startup() {
@@ -38,9 +39,9 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "arb",
-      email: "arb@gmail.com",
-      password: "123456789",
+      name: "",
+      email: "",
+      password: "",
       password_confirmation: "",
       loading: false,
       isSelected: false,
@@ -115,7 +116,8 @@ export default class Login extends Component {
             });
 
             this.storeToken(res.data).then((res) => {
-              Actions.startup();
+               addProfileData(req);
+              Actions.ProfileScreen();
             });
 
             //AsyncStorage.setItem("id", res.data.user.id);
@@ -130,7 +132,7 @@ export default class Login extends Component {
             this.setState({
               loading: false,
             });
-            console.log(err.response.data?.message);
+            console.log(err);
             alert(err.response.data?.message);
           }
         );

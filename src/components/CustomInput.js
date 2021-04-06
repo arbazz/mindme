@@ -9,7 +9,7 @@ export default function CustomInput ({password, placeholder, onChange, style}) {
     return(
         <TextInput
             placeholder={placeholder}
-            style={[styles.container, style]}
+            style={[styles.container, style, {color: 'black'}]}
             secureTextEntry={password}
             onChangeText={onChange}
         />

@@ -8,7 +8,8 @@ import {
   ScrollView,
   Dimensions,
   Alert,
-  Image
+  Image,
+  Switch
 } from "react-native";
 
 
@@ -27,7 +28,7 @@ import Agree from "../components/Agree";
 import axios from 'axios';
 
 export default class Login extends Component {
-  
+
   constructor(props) {
     super(props);
     this.toggleSwitch = this.toggleSwitch.bind(this);
@@ -51,19 +52,20 @@ export default class Login extends Component {
 
   _isMounted = false;
   async componentDidMount() {
-    
+
     this._isMounted = true;
     this.getToken();
     const email = await this.getRememberedUser();
-    this.setState({ 
-       email: email || "", 
-       rememberMe: email ? true : false });
-    }
+    this.setState({
+      email: email || "",
+      rememberMe: email ? true : false
+    });
+  }
 
   async storeToken(user) {
     try {
       await AsyncStorage.setItem("userData", JSON.stringify(user));
-      
+
       await setToken(user.access_token);
     } catch (error) {
       console.log("Something went wrong", error);
@@ -83,8 +85,8 @@ export default class Login extends Component {
   //This is the toggle button to remember user
   toggleRememberMe = value => {
     this.setState({ rememberMe: value })
-      if (value === true) {
-    //user wants to be remembered.
+    if (value === true) {
+      //user wants to be remembered.
       this.rememberUser();
     } else {
       this.forgetUser();
@@ -98,11 +100,11 @@ export default class Login extends Component {
     } catch (error) {
       // Error saving data
     }
-    };
-    getRememberedUser = async () => {
+  };
+  getRememberedUser = async () => {
     try {
       const email = await AsyncStorage.getItem(user.access_token);
-      
+
       if (email !== null) {
         // We have username!!
         return email;
@@ -110,15 +112,15 @@ export default class Login extends Component {
     } catch (error) {
       // Error retrieving data
     }
-    };
-    forgetUser = async () => {
-      try {
-        await AsyncStorage.removeItem('Longtail-User');
-        await AsyncStorage.clear();
-      } catch (error) {
-       // Error removing
-      }
-    };
+  };
+  forgetUser = async () => {
+    try {
+      await AsyncStorage.removeItem('Longtail-User');
+      await AsyncStorage.clear();
+    } catch (error) {
+      // Error removing
+    }
+  };
 
   doLogin() {
     const { email, password } = this.state;
@@ -148,8 +150,9 @@ export default class Login extends Component {
             });
 
             this.storeToken(res.data).then((res) => {
-              Actions.startup();
+        
               AsyncStorage.setItem("token", res.data.access_token);
+              Actions.ProfileScreen();
             });
 
             //AsyncStorage.setItem("id", res.data.user.id);
@@ -185,9 +188,9 @@ export default class Login extends Component {
     Actions.startup();
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     const uid = await AsyncStorage.getItem("uid");
-    if(uid){
+    if (uid) {
       Actions.ProfileScreen();
     }
   }
@@ -222,16 +225,26 @@ export default class Login extends Component {
     if (res.additionalUserInfo) {
       AsyncStorage.setItem("uid", res.user?.uid)
       if (res.additionalUserInfo.isNewUser) {
-          const profile = {
-            ...res.additionalUserInfo.profile,
-            uid: res.user.uid
-          };
+        const profile = {
+          ...res.additionalUserInfo.profile,
+          uid: res.user.uid
+        };
         await addProfileData(profile);
         Actions.ProfileScreen();
       } else {
         Actions.ProfileScreen();
       }
 
+    }
+  }
+
+  toggleRememberMe = value => {
+    this.setState({ rememberMe: value })
+      if (value === true) {
+    //user wants to be remembered.
+      this.rememberUser();
+    } else {
+      this.forgetUser();
     }
   }
 
@@ -248,27 +261,38 @@ export default class Login extends Component {
               <Text style={styles.email}>Email</Text>
               <CustomInput
                 placeholder="Email"
-                onChange={e=>this.setState({email: e})}
+                onChange={e => this.setState({ email: e })}
               />
             </View>
             <View style={styles.contianerText}>
               <Text style={[styles.email, { marginTop: 20 }]}>Password</Text>
               <CustomInput
                 placeholder={"Password"}
-                password={true} 
-                 onChange={e=>this.setState({ password: e})}
-                />
+                password={this.state.showPassword}
+                onChange={e => this.setState({ password: e })}
+              />
             </View>
+            <Switch
+          onValueChange={this.toggleSwitch}
+          value={!this.state.showPassword}
+          
+        /> 
+        <Text>Show Password</Text>
             <TouchableOpacity style={styles.forgContiaenr} onPress={() => this.forgotpwd()}>
               <Text style={styles.forg}>Forgot Password</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.contianerLogin} onPress={()=>this.doLogin()}>
+            <TouchableOpacity style={styles.contianerLogin} onPress={() => this.doLogin()}>
               <Text style={styles.text}>Login</Text>
             </TouchableOpacity>
+            <Switch
+          value={this.state.rememberMe}
+          onValueChange={(value) => this.toggleRememberMe(value)}
+          activeText={'On'}
+          /><Text >Remember Me</Text>
           </View>
           <View style={styles.social}>
-            <TouchableOpacity onPress={()=>Actions.signup()}>
-            <Text style={styles.signUp}>Didnot have and accout? Sign up</Text>
+            <TouchableOpacity onPress={() => Actions.signup()}>
+              <Text style={styles.signUp}>Didnot have and accout? Sign up</Text>
             </TouchableOpacity>
             <View style={styles.row}>
               <AntDesign style={[styles.iconm]}

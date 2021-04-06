@@ -380,7 +380,7 @@ export default function SelfAssesment() {
       saveSurvey();
       // Actions.SurveyCompletedScreen()
     } else {
-      if (survey[currnet].selected) {
+      if (survey[currnet].selected || survey[currnet].selected === 0 ) {
         setCurrent(currnet + 1)
       }
     }
@@ -396,7 +396,7 @@ export default function SelfAssesment() {
       parseInt( survey[5].act);
 
     const req = {
-      score: 0,
+      score: tempNumber,
       smst_todayifeel: survey[1].act,
       smst_relationship: survey[3].act,
       smst_stateofmind: survey[2].act,
@@ -425,6 +425,7 @@ export default function SelfAssesment() {
         //this.props.navigation.navigate(startup);
         //console.warn(res);
         console.log("about to navigate");
+
         Actions.SurveyCompletedScreen({
           surveyAnswers: res.data,
             surveyScore: tempNumber,

@@ -4,9 +4,9 @@ import firestore from '@react-native-firebase/firestore';
 const usersCollection = firestore().collection('Users');
 
 
-const getUser = () => {
+const getUser = (uid) => {
     return new Promise((res, rej) => {
-        usersCollection.get()
+        usersCollection.where("uid", "==", uid).get()
             .then((querySnapshot) => {
                 let temp = [];
                 querySnapshot.forEach(documentSnapshot => {
