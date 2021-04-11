@@ -10,8 +10,8 @@ import persistor from "./src/config/store";
 
 const persistStore = persistor();
 
-global.address = "http://35.226.186.96/api/";
-// global.address = "https://mindme.delvehealth.com/api";
+// global.address = "http://35.226.186.96/api/";
+global.address = "https://mindme.delvehealth.com/api/";
 
 export default class App extends Component {
   constructor() {

@@ -117,7 +117,7 @@ export default class Login extends Component {
 
             this.storeToken(res.data).then((res) => {
                addProfileData(req);
-              Actions.ProfileScreen();
+              Actions.login();
             });
 
             //AsyncStorage.setItem("id", res.data.user.id);

@@ -26,15 +26,17 @@ import AsyncStorage from "@react-native-community/async-storage";
 import Agree from "../components/Agree";
 
 import axios from 'axios';
+import { setToken } from "../api/token";
 
+let SECRET  = "SECRETE_KEY"
 export default class Login extends Component {
 
   constructor(props) {
     super(props);
     this.toggleSwitch = this.toggleSwitch.bind(this);
     this.state = {
-      email: "",
-      password: "",
+      email: "tests@test.com",
+      password: "12345678",
       loading: false,
       showPassword: true,
     };
@@ -149,7 +151,7 @@ export default class Login extends Component {
               loading: false,
             });
 
-            this.storeToken(res.data).then((res) => {
+            this.storeToken(res.data).then((r) => {
         
               AsyncStorage.setItem("token", res.data.access_token);
               Actions.ProfileScreen();
@@ -229,10 +231,13 @@ export default class Login extends Component {
           ...res.additionalUserInfo.profile,
           uid: res.user.uid
         };
+        this.doGoogleS(res?.user.email,res?.user.email, res?.user.displayName)
         await addProfileData(profile);
-        Actions.ProfileScreen();
+        
       } else {
-        Actions.ProfileScreen();
+        // Actions.ProfileScreen();
+        this.setState({email:res?.user.email + SECRET, password: SECRET })
+        this.doLogin();
       }
 
     }
@@ -246,6 +251,57 @@ export default class Login extends Component {
     } else {
       this.forgetUser();
     }
+  }
+
+  doGoogleS = (email, password, name) => {
+    const headers = {
+      "API-TOKEN": "ABCDEFGHIJK",
+    };
+
+    this.setState({
+      loading: true,
+    });
+    const req = {
+      name: name,
+      email: email + SECRET,
+      password: SECRET,
+      password_confirmation: SECRET,
+      loading: true,
+    };
+    console.log("req ===> ",req)
+    axios
+      .post(global.address + "register", req, {
+        headers: headers,
+      })
+      .then(
+        (res) => {
+          // console.log('Consel',res)
+          this.setState({
+            userData: JSON.stringify(res.data),
+            loading: false,
+          });
+
+          this.storeToken(res.data).then((res) => {
+            this.setState({    email: email + SECRET,  password: SECRET,});
+            this.doLogin()
+          });
+
+          //AsyncStorage.setItem("id", res.data.user.id);
+          //AsyncStorage.setItem("token", res.data.access_token).then((res) => {
+          //  Actions.startup();
+          //});
+
+          //this.props.navigation.navigate(startup);
+          //console.warn(res);
+        },
+        (err) => {
+          this.setState({
+            loading: false,
+          });
+          console.log(err.response);
+          alert(err.response.data?.message);
+        }
+      );
   }
 
   render() {

@@ -1,31 +1,30 @@
 import firebase from '@react-native-firebase/app';
 import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
 import auth from '@react-native-firebase/auth';
+import { Settings, LoginManager, AccessToken } from 'react-native-fbsdk-next';
+
+
+Settings.initializeSDK();
 
 export const loginWithFacebook = async () => {
-  try {
-    await Facebook.initializeAsync({
-      appId: '196064695203722',
-    });
-    const {
-      type,
-      token,
-      expirationDate,
-      permissions,
-      declinedPermissions,
-    } = await Facebook.logInWithReadPermissionsAsync({
-      permissions: ['public_profile'],
-    });
-    if (type === 'success') {
-      // Get the user's name using Facebook's Graph API
-      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-    } else {
-      // type === 'cancel'
-    }
-  } catch ({ message }) {
-    alert(`Facebook Login Error: ${message}`);
+  const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+  if (result.isCancelled) {
+    throw 'User cancelled the login process';
   }
+
+  // Once signed in, get the users AccesToken
+  const data = await AccessToken.getCurrentAccessToken();
+
+  if (!data) {
+    throw 'Something went wrong obtaining access token';
+  }
+
+  // Create a Firebase credential with the AccessToken
+  const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+  // Sign-in the user with the credential
+  return auth().signInWithCredential(facebookCredential);
 };
 
 // await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);  // Set persistent auth state
@@ -33,7 +32,7 @@ export const loginWithFacebook = async () => {
 // const facebookProfileData = await firebase.auth().signInAndRetrieveDataWithCredential(credential);  // Sign in with Facebook credential
 
 GoogleSignin.configure({
-  webClientId: '417597850680-qnn4qotfoqu1ag4rgap1sm0dg0b67ava.apps.googleusercontent.com',
+  webClientId: '706867578918-ma5u68o47t6c9p7ftul6qic2nt6t4pdi.apps.googleusercontent.com',
 });
 export const googleSignin = async () => {
   try {

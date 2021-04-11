@@ -110,7 +110,6 @@ export default class SurveyCompletedScreen extends Component {
   }
 
   goSubmit() {
-    console.warn("to submit xx");
 
     this._isMounted = true;
 
@@ -189,7 +188,6 @@ export default class SurveyCompletedScreen extends Component {
 
     const randomBehavior = this.props.navigation.getParam("randomBehavior");
 
-    console.warn("sdf" + randomBehavior);
 
     const { navigation } = this.props;
 
@@ -215,7 +213,6 @@ export default class SurveyCompletedScreen extends Component {
         <View style={styles.conteianer}>
           <Text style={styles.qna}>Question And Details</Text>
           <View style={styles.dexConsirna}>
-
             <Text style={styles.dexText}>
               {
                 tempNumber > 16 ? (
@@ -257,27 +254,34 @@ export default class SurveyCompletedScreen extends Component {
         </View>
 
         <View style={styles.graphCOntienar}>
-          <LineChart
+        {!!this.state.data  && !!this.state.data.length &&  <LineChart
             data={{ labels: labels, datasets: [{ data: this.state.data }] }}
-            width={width - 50}
-            withHorizontalLabels={false}
-            height={height - 500}
-            yAxisInterval={1}
-            fromZero={true}
-            withInnerLines={false}
+           
+              width={Dimensions.get("window").width - 40} // from react-native
+            height={220}
+           
+            yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
               backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#D9D9D9",
-              backgroundGradientTo: "#FFF",
-              decimalPlaces: 0, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              style: { borderRadius: 16 },
-              propsForDots: { r: "6", strokeWidth: "2", stroke: "#ffa726" },
+              backgroundGradientFrom: "#fb8c00",
+              backgroundGradientTo: "#ffa726",
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726"
+              }
             }}
-            bezier
-            style={{ marginVertical: 5, borderRadius: 15 }}
-          />
+            style={{
+              marginVertical: 8,
+              borderRadius: 16
+            }}
+          />}
         </View>
         <TouchableOpacity style={styles.btn}>
           <CustomButton
