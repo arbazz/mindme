@@ -24,11 +24,13 @@ import { googleSignin, loginWithFacebook } from "../fire/auth";
 import { addProfileData } from "../fire/addData";
 import AsyncStorage from "@react-native-community/async-storage";
 import Agree from "../components/Agree";
+import Entypo from 'react-native-vector-icons/Entypo';
+import Video from 'react-native-video';
 
 import axios from 'axios';
 import { setToken } from "../api/token";
 
-let SECRET  = "SECRETE_KEY"
+let SECRET = "SECRETE_KEY"
 export default class Login extends Component {
 
   constructor(props) {
@@ -152,7 +154,7 @@ export default class Login extends Component {
             });
 
             this.storeToken(res.data).then((r) => {
-        
+
               AsyncStorage.setItem("token", res.data.access_token);
               Actions.ProfileScreen();
             });
@@ -231,12 +233,12 @@ export default class Login extends Component {
           ...res.additionalUserInfo.profile,
           uid: res.user.uid
         };
-        this.doGoogleS(res?.user.email,res?.user.email, res?.user.displayName)
+        this.doGoogleS(res?.user.email, res?.user.email, res?.user.displayName)
         await addProfileData(profile);
-        
+
       } else {
         // Actions.ProfileScreen();
-        this.setState({email:res?.user.email + SECRET, password: SECRET })
+        this.setState({ email: res?.user.email + SECRET, password: SECRET })
         this.doLogin();
       }
 
@@ -245,8 +247,8 @@ export default class Login extends Component {
 
   toggleRememberMe = value => {
     this.setState({ rememberMe: value })
-      if (value === true) {
-    //user wants to be remembered.
+    if (value === true) {
+      //user wants to be remembered.
       this.rememberUser();
     } else {
       this.forgetUser();
@@ -268,7 +270,7 @@ export default class Login extends Component {
       password_confirmation: SECRET,
       loading: true,
     };
-    console.log("req ===> ",req)
+    console.log("req ===> ", req)
     axios
       .post(global.address + "register", req, {
         headers: headers,
@@ -282,7 +284,7 @@ export default class Login extends Component {
           });
 
           this.storeToken(res.data).then((res) => {
-            this.setState({    email: email + SECRET,  password: SECRET,});
+            this.setState({ email: email + SECRET, password: SECRET, });
             this.doLogin()
           });
 
@@ -310,7 +312,7 @@ export default class Login extends Component {
     return (
       <ScrollView contentContainerStyle={{ backgroundColor: background, flexGrow: 1 }}>
         <View style={styles.mainCOntianer}>
-          <View />
+          {/* <View /> */}
           <View style={styles.container}>
             <Image source={Logo} style={styles.image} />
             <View style={[styles.contianerText]}>
@@ -322,18 +324,37 @@ export default class Login extends Component {
             </View>
             <View style={styles.contianerText}>
               <Text style={[styles.email, { marginTop: 20 }]}>Password</Text>
-              <CustomInput
-                placeholder={"Password"}
-                password={this.state.showPassword}
-                onChange={e => this.setState({ password: e })}
-              />
+              <View
+                style={{
+                  borderColor: 'grey',
+                  borderWidth: 0.5,
+                  borderRadius: 10,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <CustomInput
+                  style={{ borderColor: 'white', width: '80%' }}
+                  placeholder={"Password"}
+                  password={this.state.showPassword}
+                  onChange={e => this.setState({ password: e })}
+                />
+               {!!this.state.showPassword ? <Entypo name="eye" style={styles.eye} 
+                 onPress={this.toggleSwitch}
+                /> : 
+                <Entypo name="eye-with-line" style={styles.eye} 
+                onPress={this.toggleSwitch}
+               /> 
+                }
+              </View>
             </View>
-            <Switch
-          onValueChange={this.toggleSwitch}
-          value={!this.state.showPassword}
-          
-        /> 
-        <Text>Show Password</Text>
+            {/* <Switch
+              onValueChange={this.toggleSwitch}
+              value={!this.state.showPassword}
+
+            />
+            <Text>Show Password</Text> */}
             <TouchableOpacity style={styles.forgContiaenr} onPress={() => this.forgotpwd()}>
               <Text style={styles.forg}>Forgot Password</Text>
             </TouchableOpacity>
@@ -341,10 +362,30 @@ export default class Login extends Component {
               <Text style={styles.text}>Login</Text>
             </TouchableOpacity>
             <Switch
-          value={this.state.rememberMe}
-          onValueChange={(value) => this.toggleRememberMe(value)}
-          activeText={'On'}
-          /><Text >Remember Me</Text>
+              value={this.state.rememberMe}
+              onValueChange={(value) => this.toggleRememberMe(value)}
+              activeText={'On'}
+            /><Text >Remember Me</Text>
+          </View>
+          <View>
+          <Video
+          source={{uri: "https://storage.googleapis.com/mindme/MindMeApp.mp4"}}
+            videoProps={{
+              shouldPlay: this.state.shouldPlay,
+              tapAnywhereToPause: true,
+              source: {
+                uri: "https://storage.googleapis.com/mindme/MindMeApp.mp4",
+              },
+            }}
+            onLoad={this.setDuration}
+            playInBackground={false}                // Audio continues to play when app entering background.
+            playWhenInactive={false}
+
+            inFullscreen={false}
+            style={{height:height * 0.3, width: width * 0.9, marginLeft: 20 }}
+            height={height * 0.3}
+            width={width * 0.9}
+          />
           </View>
           <View style={styles.social}>
             <TouchableOpacity onPress={() => Actions.signup()}>
@@ -371,7 +412,7 @@ const styles = StyleSheet.create({
   container: {
     width: '90%',
     alignSelf: 'center',
-    marginTop: 30,
+    marginTop: 10,
     justifyContent: 'center',
     flex: 1,
     height: '100%',
@@ -412,7 +453,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   image: {
-    marginBottom: 30
+    marginBottom: 10
   },
   mainCOntianer: {
     justifyContent: 'space-between',
@@ -425,20 +466,25 @@ const styles = StyleSheet.create({
   social: {
     alignSelf: 'center',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 0,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10
+    marginTop: 0
   },
   signUp: {
     alignSelf: 'center',
     color: 'grey'
   },
   iconm: {
-    fontSize: 40,
+    fontSize: 30,
     marginVertical: 10,
     marginHorizontal: 10
+  },
+  eye: {
+    marginRight: 10,
+    fontSize: 22,
+    color: 'grey'
   }
 });

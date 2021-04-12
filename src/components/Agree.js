@@ -12,7 +12,7 @@ import { primary } from '../pages/config';
 export default function Agree() {
 
     return (
-        <View style={{ marginBottom: 20 }}>
+        <View style={{ marginBottom: 10 }}>
             <View>
                 <Text style={styles.tedxt}>
                     
