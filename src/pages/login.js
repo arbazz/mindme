@@ -392,9 +392,9 @@ export default class Login extends Component {
               <Text style={styles.signUp}>Didnot have and accout? Sign up</Text>
             </TouchableOpacity>
             <View style={styles.row}>
-              <AntDesign style={[styles.iconm]}
+              {/* <AntDesign style={[styles.iconm]}
                 onPress={this.handleFacebook}
-                color="#4169e1" name="facebook-square" size={24} />
+                color="#4169e1" name="facebook-square" size={24} /> */}
               <AntDesign
                 onPress={this.handleGoogle}
                 name="google" style={styles.iconm} size={24} color="#f8617a" />
