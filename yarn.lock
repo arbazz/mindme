@@ -1095,11 +1095,6 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz#e42b1bef12d2415411519fd528e64b593b1363dc"
   integrity sha512-W/J0fNYVO01tioHjvYWQ9m6RgndVtbElzYozBq1ZPrHO/iCzlqoySHl4gO/fpCl9QEFjvJfjPgtPMTMlsoq5DQ==
 
-"@react-native-community/google-signin@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/google-signin/-/google-signin-5.0.0.tgz#d1d89c697cc214c10017fa283817e84bd03b2d76"
-  integrity sha512-MvFHImmtlmE1kJZgZ9XaULm/OBuQ/AQWOCPr3NzYTUv2cCqyGwfFrealo5PS/fuL/InCGcfqK1k/1dZ+67Hjmg==
-
 "@react-native-community/masked-view@^0.1.10":
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
@@ -6084,11 +6079,6 @@ react-native-codegen@^0.0.6:
     flow-parser "^0.121.0"
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
-
-react-native-fbsdk-next@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-fbsdk-next/-/react-native-fbsdk-next-4.0.0.tgz#b88f207d76c67db39cffda6e9b7c716cb6f92877"
-  integrity sha512-ql5Pbbxpp1kN2IK2AsYVoh2BJ7cMc4fT6oU7U04GLufikYuiul/rcwe4SXuEJzdzsce8idZ9oYcmPt1yHyZm1g==
 
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"
